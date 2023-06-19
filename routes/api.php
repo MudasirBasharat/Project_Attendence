@@ -20,6 +20,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/create',[UserController::class,'create'])->name('create');
 Route::post('signin',[UserController::class,'signin'])->name('signin');
+Route::post('total/{id}',[UserController::class,'total_duration'])->name('total_duration');
 Route::middleware('auth:sanctum')->group(function () {
 Route::post('signout',[UserController::class,'signout'])->name('signout');
 });

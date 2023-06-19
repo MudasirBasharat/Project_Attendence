@@ -51,8 +51,8 @@ class UserController extends Controller
 
         if ($user && Hash::check($request->password, $user->password)) {
             $token = $user->createToken($request->email)->plainTextToken;
-            $ip_address = $request->ip();
-            // $ip_address='192.168.1.1';
+            // $ip_address = $request->ip();
+            $ip_address='192.168.1.1';
             $user_ip_parts = explode('.', $ip_address);
             $user_ip = implode('.', array_slice($user_ip_parts, 0, 3));
             $static_ips = Static_ip::all();
@@ -142,8 +142,8 @@ class UserController extends Controller
             $userId = auth()->user()->id;
             auth()->user()->tokens()->delete();
 
-            $ip_address = $request->ip();
-            // $ip_address='192.168.1.1';
+            // $ip_address = $request->ip();
+            $ip_address='192.168.1.1';
             $departure = Carbon::now();
             $user_ip_parts = explode('.', $ip_address);
             $user_ip = implode('.', array_slice($user_ip_parts, 0, 3));
@@ -217,42 +217,51 @@ class UserController extends Controller
         }
 
 
-        private function total_duration($userId)
-{
-    $date = '2023-06-18';
+        private function total_duration($userId){
+            $date = '2023-06-19';
+            $user = User::find($userId);
+            if ($user) {
+                $startDate = Carbon::createFromFormat('Y-m-d', $date)->startOfDay();
+                $endDate = Carbon::createFromFormat('Y-m-d', $date)->endOfDay();
 
-    $user = User::find($userId);
+                $remote = $user->remote_record()->whereBetween('created_at', [$startDate, $endDate])->sum('total_remote_duration');
+                $office = $user->office_record()->whereBetween('created_at', [$startDate, $endDate])->sum('total_physical_duration');
+                $total_sum = $remote + $office;
 
-    if ($user) {
-        $remote = $user->remote_record()->whereDate('created_at', $date)->sum('total_remote_duration');
-        $office = $user->office_record()->whereDate('created_at', $date)->sum('total_physical_duration');
+                $userExists = total_record::where("user_id", $user->id)->first();
+                if ($userExists) {
+                    $userExists->remote_hours = $remote;
+                    $userExists->physical_hours = $office;
+                    $userExists->total_duration = $total_sum;
+                    if($userExists->total_duration<=3){
+                        $userExists->Attendence="ABSENT";
+                    }elseif($userExists->total_duration<=5){
+                        $userExists->Attendence="HALF DAY";
+                    }else{
+                        $userExists->Attendence="FULL DAY";
+                    }
+                    $userExists->save();
+                } else {
+                    $total_record = new total_record();
+                    $total_record->user_id = $user->id;
+                    $total_record->remote_hours = $remote;
+                    $total_record->physical_hours = $office;
+                    $total_record->total_duration = $total_sum;
+                    if($total_record->total_duration<=3){
+                        $total_record->Attendence="ABSENT";
+                    }elseif($total_record->total_duration<=5){
+                        $total_record->Attendence="HALF DAY";
+                    }else{
+                        $total_record->Attendence="FULL DAY";
+                    }
+                    $total_record->save();
+                }
 
-        $total_sum = $remote + $office;
+                return response(['message' => 'Total record created or updated successfully']);
+            }
 
-        $total_record = new total_record();
-        $total_record->user_id = $user->id;
-        $total_record->remote_hours = $remote;
-        $total_record->physical_hours = $office;
-        $total_record->total_duration = $total_sum;
-        $total_record->save();
-        if($total_record->total_duration<=3){
-            $total_record->Attendence="ABSENT";
-            $total_record->save();
-        }elseif($total_record->total_duration<=5){
-            $total_record->Attendence="HALF DAY";
-            $total_record->save();
-        }else{
-            $total_record->Attendence="FULL DAY";
-            $total_record->save();
+            return response(['message' => 'User not found'], 404);
         }
-
-        return response(['message' => 'Total record created successfully']);
-    }
-
-
-    return response(['message' => 'User not found'], 404);
-}
-
 
 }
 
