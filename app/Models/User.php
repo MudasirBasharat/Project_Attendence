@@ -19,7 +19,7 @@ class User extends Authenticatable
      *
      */
     public function total_record(){
-        return $this->hasOne(total_record::class);
+        return $this->hasMany(total_record::class);
     }
     public function remote_record(){
         return $this->hasOne(remote_record::class);

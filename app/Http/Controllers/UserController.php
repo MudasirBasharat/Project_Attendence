@@ -51,8 +51,9 @@ class UserController extends Controller
 
         if ($user && Hash::check($request->password, $user->password)) {
             $token = $user->createToken($request->email)->plainTextToken;
-            // $ip_address = $request->ip();
-            $ip_address='192.168.1.1';
+            $ip_address = $request->ip();
+            // static ip for testing purpose
+            // $ip_address='192.168.1.1';
             $user_ip_parts = explode('.', $ip_address);
             $user_ip = implode('.', array_slice($user_ip_parts, 0, 3));
             $static_ips = Static_ip::all();
@@ -138,12 +139,12 @@ class UserController extends Controller
     // Logout method
     public function signout(Request $request)
     {
-        // if (auth()->check()) {
             $userId = auth()->user()->id;
             auth()->user()->tokens()->delete();
 
-            // $ip_address = $request->ip();
-            $ip_address='192.168.1.1';
+            $ip_address = $request->ip();
+            // static ip for testing purpose
+            // $ip_address='192.168.1.1';
             $departure = Carbon::now();
             $user_ip_parts = explode('.', $ip_address);
             $user_ip = implode('.', array_slice($user_ip_parts, 0, 3));
@@ -204,18 +205,8 @@ class UserController extends Controller
 
              $visit_depart->total_physical_duration= $office_hours;
              $visit_depart->save();
-            //  total_record::updateOrCreate(
-            //     ['user_id' => $userId],
-            //     ['physical_hours' => $office_hours]
-            //         );
 
-            //   response([
-            //     'message'=>'Office Record Inserted'
-            //   ]);
-
-            //  session(['visit_time' => $visit_depart->visit_time]);
         }
-
 
         private function total_duration($userId){
             $date = '2023-06-19';
@@ -263,6 +254,21 @@ class UserController extends Controller
             return response(['message' => 'User not found'], 404);
         }
 
+        //Check the Specific user data
+        public function specific_record_user(Request $request, $id)
+        {
+            $user = User::where('email', $request->name)->first();
+            if($user){
+               $user=$user->total_record()->get();
+               return $user;
+            }
+        }
+
+        // All user record
+        public function all_user_record(Request $request)
+        {
+            $user_record=User::with('total_record')->get();
+            return $user_record;
+
+        }
 }
-
-
