@@ -32,8 +32,6 @@ Based on the total session duration, attendance is marked as follows:
 
 For more details on how the attendance marking is implemented, please refer to the `UserController` in the source code for reference.
 
-Please note that the actual implementation may vary based on your specific project's structure and requirements. Make sure to check the appropriate controller or relevant code files in your project for a complete understanding of the attendance marking logic.
-
 ### Cron Job for Table Truncation
 
 To manage the table load and maintain data integrity, a cron job is implemented to automatically truncate the remote and office tables every week. This ensures that the tables are cleaned and ready to store new attendance data for the upcoming week.
