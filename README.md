@@ -47,11 +47,6 @@ The project includes a Docker repository where the project image is pushed.
 Please refer to the installation instructions in the repository for details on setting up the Attendance Management Service.
 
 ---
-
-Feel free to customize and adapt this text according to your project's structure and requirements.
----
-
-Feel free to customize and adapt this text according to your specific project's structure and requirements.
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
