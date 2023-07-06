@@ -2,18 +2,39 @@
 
 # About Laravel
 
-Laravel is a web application framework with expressive, elegant syntax. We believe development must be an enjoyable and creative experience to be truly fulfilling. Laravel takes the pain out of development by easing common tasks used in many web projects, such as:
+I have reworded the paragraph to make it more concise and organized. Here's the revised version:
 
-- [Simple, fast routing engine](https://laravel.com/docs/routing).
-- [Powerful dependency injection container](https://laravel.com/docs/container).
-- Multiple back-ends for [session](https://laravel.com/docs/session) and [cache](https://laravel.com/docs/cache) storage.
-- Expressive, intuitive [database ORM](https://laravel.com/docs/eloquent).
-- Database agnostic [schema migrations](https://laravel.com/docs/migrations).
-- [Robust background job processing](https://laravel.com/docs/queues).
-- [Real-time event broadcasting](https://laravel.com/docs/broadcasting).
+## Attendance Management Service
 
-Laravel is accessible, powerful, and provides tools required for large, robust applications.
+This repository contains the source code and related files for the Attendance Management Service, an online attendance marking system.
 
+### Description
+
+The Attendance Management Service allows users to log in to the website and records their IP address in the database for attendance tracking purposes. The attendance session begins upon login and ends upon logout. 
+
+When a user logs in, the system checks if their IP address matches any of the predefined static IP addresses stored in a model. If the first three octets of the user's IP address match with a static IP, the system marks the user as being in the office. Otherwise, the user is considered to be working remotely. 
+
+The system consists of five models: 
+1. User model: Stores user information in the database.
+2. Static model: Stores predefined static IP addresses.
+3. Remote table: Stores data for users working remotely, including login time, logout time, and total session duration.
+4. Office table: Stores data for users working in the office, including login time, logout time, and total session duration.
+5. Total duration table: Stores the total session durations for remote and office work.
+
+Based on the total session duration, attendance is marked as follows:
+- Less than 3 hours: Absent
+- 3 to 5 hours: Half attendance
+- More than 5 hours: Full attendance
+
+Users can have multiple sessions by logging in and out. The remote and office tables only store login and logout records. A cron job is implemented to truncate the tables every week to manage table load. At the end of each day, the total session data for remote and office work is stored in the total duration table for attendance marking.
+
+The project includes a Docker repository where the project image is pushed. Additionally, an idle timeout of 15 minutes is implemented, automatically logging out users who haven't performed any task during that time. They will need to log in again to continue using the system.
+
+Please refer to the installation instructions in the repository for details on setting up the Attendance Management Service.
+
+---
+
+Feel free to customize and adapt this text according to your specific project's structure and requirements.
 ## Learning Laravel
 
 Laravel has the most extensive and thorough [documentation](https://laravel.com/docs) and video tutorial library of all modern web application frameworks, making it a breeze to get started with the framework.
