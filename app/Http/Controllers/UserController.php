@@ -110,9 +110,6 @@ class UserController extends Controller
         // Perform physical location specific actions
         $currentDateTime = now();
         $visit = $currentDateTime->format('H:i:s');
-        session(['user_id' => $user->id]);
-        session(['user_location' => $userlocation]);
-        session()->put('expires_at', now()->addHours(24));
         $add_comein_time = new office_record();
         $add_comein_time->user_id = $user->id;
         $add_comein_time->ip_address = $ip_address;
@@ -203,11 +200,7 @@ class UserController extends Controller
         }
 
         private function total_duration($userId){
-<<<<<<< HEAD
             $date = Carbon::today()->toDateString();
-=======
-            $date = date('Y.m.d');
->>>>>>> f518d5aaff2d453752eecfffda3abd29bac4c335
             $user = User::find($userId);
             if ($user) {
                 $startDate = Carbon::createFromFormat('Y-m-d', $date)->startOfDay();
