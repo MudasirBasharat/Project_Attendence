@@ -1,5 +1,4 @@
 <?php
-
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -20,10 +19,11 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 });
 Route::post('/create',[UserController::class,'create'])->name('create');
 Route::post('signin',[UserController::class,'signin'])->name('signin');
-Route::post('total/{id}',[UserController::class,'total_duration'])->name('total_duration');
-Route::get('record_user/{name}',[UserController::class,'specific_record_user'])->name('record_user');
+Route::get('record_user/{email}',[UserController::class,'specific_record_user'])->name('record_user');
 Route::get('all_user_record',[UserController::class,'all_user_record'])->name('all_user_record');
-Route::middleware('auth:sanctum')->group(function () {
+
+Route::middleware(['auth:sanctum', 'lastActivity'])->group(function () {
 Route::post('signout',[UserController::class,'signout'])->name('signout');
+Route::get('loggeduser',[UserController::class,'logged_user_data'])->name('logged_user_data');
 });
 

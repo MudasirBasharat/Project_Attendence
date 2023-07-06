@@ -28,12 +28,8 @@ class UserController extends Controller
         $user->email = $request->email;
         $user->password = $request->password;
         $user->save();
-
-        $token = $user->createToken($request->email)->plainTextToken;
-
         return response([
             'message' => 'User Created',
-            'token' => $token,
         ]);
     }
 
@@ -137,7 +133,7 @@ class UserController extends Controller
 
 
     // Logout method
-    public function signout(Request $request)
+    public function signout(Request $request )
     {
             $userId = auth()->user()->id;
             auth()->user()->tokens()->delete();
@@ -178,7 +174,7 @@ class UserController extends Controller
                 $visit->save();
             $visitTimestamp =Carbon::parse($visit->visit_time);
             $departureTimestamp = Carbon::parse($visit->departure_time);
-            $remote_hours = $visitTimestamp->diffInMinutes($departureTimestamp);
+            $remote_hours = $visitTimestamp->diffInHours($departureTimestamp);
             $visit->total_remote_duration= $remote_hours;
             $visit->save();
             response([
@@ -192,8 +188,7 @@ class UserController extends Controller
 
               $departure_office=Carbon::now();
               $visit_depart = office_record::where('user_id', $userId)
-               ->whereNotNull('visit_time')
-               ->whereNull('departure_time')
+               ->whereNotNull('visit_time')->whereNull('departure_time')
                ->first();
               if($visit_depart){
                   $visit_depart->departure_time = $departure_office;
@@ -201,15 +196,14 @@ class UserController extends Controller
                 }
              $visitTimestamp =Carbon::parse($visit_depart->visit_time);
              $departureTimestamp = Carbon::parse($visit_depart->departure_time);
-             $office_hours = $visitTimestamp->diffInMinutes($departureTimestamp);
-
+             $office_hours = $visitTimestamp->diffInHours($departureTimestamp);
              $visit_depart->total_physical_duration= $office_hours;
              $visit_depart->save();
 
         }
 
         private function total_duration($userId){
-            $date = '2023-06-19';
+            $date = Carbon::today()->toDateString();
             $user = User::find($userId);
             if ($user) {
                 $startDate = Carbon::createFromFormat('Y-m-d', $date)->startOfDay();

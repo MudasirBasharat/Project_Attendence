@@ -10,8 +10,12 @@ class Kernel extends ConsoleKernel
     /**
      * Define the application's command schedule.
      */
+    protected $commands = [
+        Commands\DeleteWeeklyRecords::class,
+    ];
     protected function schedule(Schedule $schedule): void
     {
+        $schedule->command('delete:weekly-records')->weekly();
         // $schedule->command('inspire')->hourly();
     }
 
