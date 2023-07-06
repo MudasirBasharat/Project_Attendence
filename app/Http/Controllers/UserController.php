@@ -203,7 +203,11 @@ class UserController extends Controller
         }
 
         private function total_duration($userId){
+<<<<<<< HEAD
             $date = Carbon::today()->toDateString();
+=======
+            $date = date('Y.m.d');
+>>>>>>> f518d5aaff2d453752eecfffda3abd29bac4c335
             $user = User::find($userId);
             if ($user) {
                 $startDate = Carbon::createFromFormat('Y-m-d', $date)->startOfDay();
