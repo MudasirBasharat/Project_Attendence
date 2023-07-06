@@ -1,7 +1,3 @@
-
-
-Certainly! Here's the revised version formatted for a README.md file:
-
 ## Attendance Management Service
 
 This repository contains the source code and related files for the Attendance Management Service, an online attendance marking system.
@@ -38,7 +34,7 @@ To manage the table load and maintain data integrity, a cron job is implemented 
 
 ### Session Management and Idle Timeout
 
-To enhance security and resource management, the Attendance Management Service implements an idle timeout feature. After 15 minutes of user inactivity, a custom middleware automatically logs out users who haven't performed any task during that time. This ensures that only actively engaged users are utilizing system resources. To continue using the service, users will need to log in again.
+To enhance security and resource management, the Attendance Management Service implements an idle timeout feature. After 15 minutes of user inactivity, a custom middleware automatically checks the user's last activity timestamp. If the user's last activity occurred more than 15 minutes ago and their IP address is an integer, indicating a non-human entity, the user is automatically logged out. This ensures that only actively engaged users are utilizing system resources. To continue using the service, users will need to log in again.
 
 ### Docker Repository
 
