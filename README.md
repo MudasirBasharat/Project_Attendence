@@ -40,6 +40,16 @@ To enhance security and resource management, the Attendance Management Service i
 
 The project includes a Docker repository where the project image is pushed.
 
-Please refer to the installation instructions in the repository for details on setting up the Attendance Management Service.
+### Cloning the Project
+
+If you want to clone the project from GitHub, please follow these steps:
+
+1. Make sure you have Composer installed on your system.
+2. Clone the project repository using the `git clone` command.
+3. Navigate to the project directory.
+4. Rename the `.env.example` file to `.env`.
+5. Run `composer install` to install the project dependencies.
+
+Please refer to the installation instructions in the repository for further details on setting up the Attendance Management Service.
 
 ---
