@@ -22,7 +22,7 @@ class CheckLastActivity
             $inactiveTime = Carbon::parse($lastActivity)->diffInMinutes(Carbon::now());
 
             if($inactiveTime > 15) {
-                Auth::logout();
+                Auth::signout();
 
                 return response()->json(['message' => 'Session expired due to inactivity'], 401);
             } else {

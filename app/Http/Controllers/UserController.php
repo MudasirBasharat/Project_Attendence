@@ -156,7 +156,7 @@ class UserController extends Controller
             }
             $this->total_duration($userId);
             return response([
-                'message'=>'Process complete| Deleted Successfully',
+                'message'=>'Process complete| logout Successfully',
             ]);
 
     }
