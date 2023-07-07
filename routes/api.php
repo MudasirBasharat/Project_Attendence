@@ -24,6 +24,5 @@ Route::get('all_user_record',[UserController::class,'all_user_record'])->name('a
 
 Route::middleware(['auth:sanctum', 'lastActivity'])->group(function () {
 Route::post('signout',[UserController::class,'signout'])->name('signout');
-Route::get('loggeduser',[UserController::class,'logged_user_data'])->name('logged_user_data');
 });
 
